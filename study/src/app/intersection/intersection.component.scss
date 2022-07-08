@@ -1,0 +1,27 @@
+.handle line {
+    fill: none;
+    stroke: #000;
+}
+
+.handle circle {
+    fill: #000;
+    stroke: #fff;
+    cursor: move;
+}
+
+.segment {
+    stroke-width: 3px;
+}
+
+.checkbox {
+    float: right;
+    margin-top: 8px;
+    margin-right: 4px;
+}
+
+.controls {
+    position: absolute;
+    width: 940px;
+    padding: 10px;
+    z-index: 1;
+}
