@@ -6,15 +6,11 @@ import { AppComponent } from './app.component';
 import { IntersectionComponent } from './intersection/intersection.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {MatSelectModule} from '@angular/material/select';
-import {MatAutocompleteModule} from'@angular/material/autocomplete';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatIconModule} from '@angular/material/icon';
 import { AutocompleteComponent } from './autocomplete/autocomplete.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+
+import { MaterialModule } from './material/material.module';
+import { MaterialTutorialComponent } from './material-tutorial/material-tutorial.component';
 
 @NgModule({
   declarations: [
@@ -22,19 +18,13 @@ import { MatInputModule } from '@angular/material/input';
     IntersectionComponent,
     AutocompleteComponent,
     ToolbarComponent,
+    MaterialTutorialComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatSelectModule,
-    MatAutocompleteModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]
