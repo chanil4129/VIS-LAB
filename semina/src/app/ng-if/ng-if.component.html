@@ -1,0 +1,9 @@
+<!-- ngIf에 의한 show/hide -->
+<!-- ngIf 디렉티브에 의해 제거된 요소는 DOM에 
+    남아 있지 않고 완전히 제거되어 불필요한 자원의 낭비를 방지 -->
+<p *ngIf="isShow">Lorem ipsum dolor sit amet</p>
+
+<!-- 스타일 바인딩에 의한 show/hide -->
+<p [style.display]="isShow ? 'block' : 'none'">Lorem ipsum dolor sit amet</p>
+
+<button (click)="click_button()">{{ getnotification() }}</button>

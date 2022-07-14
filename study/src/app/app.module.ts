@@ -24,7 +24,7 @@ import { MaterialTutorialComponent } from './material-tutorial/material-tutorial
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
