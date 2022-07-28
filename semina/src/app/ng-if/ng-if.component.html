@@ -4,6 +4,7 @@
 <p *ngIf="isShow">Lorem ipsum dolor sit amet</p>
 
 <!-- 스타일 바인딩에 의한 show/hide -->
-<p [style.display]="isShow ? 'block' : 'none'">Lorem ipsum dolor sit amet</p>
+<p [style.display]="isShow ? 'block' : 'none'">
+    Lorem ipsum dolor sit amet</p>
 
 <button (click)="click_button()">{{ getnotification() }}</button>
