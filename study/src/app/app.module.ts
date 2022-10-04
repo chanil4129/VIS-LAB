@@ -11,6 +11,9 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 
 import { MaterialModule } from './material/material.module';
 import { MaterialTutorialComponent } from './material-tutorial/material-tutorial.component';
+import { HyeonwooComponent } from './hyeonwoo/hyeonwoo.component';
+import {MatButtonModule} from '@angular/material/button';
+import { DendrogramComponent } from './dendrogram/dendrogram.component';
 
 @NgModule({
   declarations: [
@@ -19,12 +22,15 @@ import { MaterialTutorialComponent } from './material-tutorial/material-tutorial
     AutocompleteComponent,
     ToolbarComponent,
     MaterialTutorialComponent,
+    HyeonwooComponent,
+    DendrogramComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
+    MatButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
