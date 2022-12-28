@@ -1,0 +1,32 @@
+<p>workspace works!</p>
+<div class="bubbleChart" >
+    <!-- 반복문 사용해 서로 다른 데이터가 들어가는 16개 차트 구현 
+        1개 Array => 차트 16개
+            혹은
+        4개 Array => 차트 4개씩
+        등등 자유롭게
+    -->
+    <mat-grid-list cols="4" rowHeight="300px">
+        <mat-grid-tile *ngFor="let drug of drugs">
+            <app-bubble-chart [data]="A_type" [drug]="drug"></app-bubble-chart>
+        </mat-grid-tile>
+        <mat-grid-tile *ngFor="let drug of drugs">
+            <app-bubble-chart [data]="B_type" [drug]="drug"></app-bubble-chart>
+        </mat-grid-tile>
+        <mat-grid-tile *ngFor="let drug of drugs">
+            <app-bubble-chart [data]="C_type" [drug]="drug"></app-bubble-chart>
+        </mat-grid-tile>
+        <mat-grid-tile *ngFor="let drug of drugs">
+            <app-bubble-chart [data]="D_type" [drug]="drug"></app-bubble-chart>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>
+
+<div class="divergingBarChart">
+    <span>연구자 선택 </span>
+    <select [(ngModel)]="selection1" (change)="event(selection1)">
+        <option></option>
+        <option *ngFor="let data of chartData$ | async" [ngValue]="data">{{data.Study}} {{data.Year}} {{data.Type}}</option>
+    </select>
+    <app-diverging-bar-chart [study]="[selection1, selection2]"></app-diverging-bar-chart>
+</div>
