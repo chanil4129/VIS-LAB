@@ -15,14 +15,16 @@ export class DivergingBarChartComponent implements OnInit, OnChanges {
   margin = {top: 20, right: 30, bottom: 40, left: 90};
   width = 460 - this.margin.left - this.margin.right;
   height = 400 - this.margin.top - this.margin.bottom;
-  drug=['Oxaliplatin','Irinotecan','push','civ'];
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['study'].currentValue) {
       // @Input()으로 받은 study의 값이 변경되면 실행할 코드
       console.log("input changes:", this.study);
-      this.render();
+      // d3.select(this.rootsvg.nativeElement)
+      //   .remove();
+      console.log('rootsvg : ',this.rootsvg.nativeElement);
+      // this.render();
     }
   }
 
@@ -48,8 +50,10 @@ export class DivergingBarChartComponent implements OnInit, OnChanges {
       .style("text-anchor", "end");
 
     // Y axis
+    let drug1=['Oxaliplatin'+this.study[0].Type,'Irinotecan'+this.study[0].Type,'push'+this.study[0].Type,'civ'+this.study[0].Type];
+    let drug2=['Oxaliplatin'+this.study[1].Type,'Irinotecan'+this.study[1].Type,'push'+this.study[1].Type,'civ'+this.study[1].Type];
     const y = d3.scaleBand()
-      .domain(this.drug)
+      .domain(drug1.concat(drug2))
       .range([0, this.height])
       .padding(.1);
     svg.append("g")
