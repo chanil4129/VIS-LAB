@@ -14,6 +14,7 @@ import { MaterialTutorialComponent } from './material-tutorial/material-tutorial
 import { HyeonwooComponent } from './hyeonwoo/hyeonwoo.component';
 import {MatButtonModule} from '@angular/material/button';
 import { DendrogramComponent } from './dendrogram/dendrogram.component';
+import { WonbinComponent } from './wonbin/wonbin.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { DendrogramComponent } from './dendrogram/dendrogram.component';
     MaterialTutorialComponent,
     HyeonwooComponent,
     DendrogramComponent,
+    WonbinComponent,
   ],
   imports: [
     BrowserModule,
