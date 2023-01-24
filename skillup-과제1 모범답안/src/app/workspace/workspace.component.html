@@ -1,0 +1,15 @@
+<div class="bubbleChart">
+  <div class="col" *ngFor="let data of dataArray">
+    <app-bubble-chart *ngFor="let drug of drugList" [data]="data" [drug]="drug"></app-bubble-chart>
+  </div>
+</div>
+
+<div class="divergingBarChart">
+    <span>연구자 선택 </span>
+    <select [(ngModel)]="selection1" (change)="findAnotherStudy(selection1)">
+        <option></option>
+        <option *ngFor="let data of chartData$ | async" [ngValue]="data">{{data.Study}} {{data.Year}} {{data.Type}}</option>
+    </select>
+
+    <app-diverging-bar-chart [study]="[selection1, selection2]" [drugList]="drugList"></app-diverging-bar-chart>
+</div>
