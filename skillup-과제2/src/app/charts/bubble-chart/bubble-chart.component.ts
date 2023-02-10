@@ -1,8 +1,9 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import * as d3 from 'd3';
+import { tickStep } from 'd3';
+import { Subject } from 'rxjs';
 import { ChartItem } from 'src/app/shared/chart-data.service';
 import { ClickedStudyService } from 'src/app/shared/clicked-study.service';
-import { StoreService } from 'src/app/shared/store.service';
 
 @Component({
   selector: 'app-bubble-chart',
@@ -13,9 +14,10 @@ export class BubbleChartComponent implements OnInit, AfterViewInit {
   @Input() data: ChartItem[];
   @Input() drug: string;
   @ViewChild('rootsvg') rootsvg: ElementRef<SVGElement>;
-  
-  constructor(private cliked_study : ClickedStudyService,
-              private store : StoreService) {
+  select: Set<string>
+  // mo_data$=new Subject<string>;
+
+  constructor(private cs: ClickedStudyService) {
 
   }
   ngAfterViewInit(): void {
@@ -32,9 +34,9 @@ export class BubbleChartComponent implements OnInit, AfterViewInit {
     const height = svgHeight - margin.top - margin.bottom;
 
     const colorScheme = [
-      '#980043','#dd3497','#7a0177','#3288aa','#fee0b6','red','green','yellow',
-      '#7fcdbb','#253494','#fec44f','#ec7014','#993404','#807dba','#54278f','#4d004b',
-      '#fcbbcc','#fb6a4a','#aaccff','#67000d','#b2df8a','#2166ff','#b2182b','#003c30'
+      '#980043', '#dd3497', '#7a0177', '#3288aa', '#fee0b6', 'red', 'green', 'yellow',
+      '#7fcdbb', '#253494', '#fec44f', '#ec7014', '#993404', '#807dba', '#54278f', '#4d004b',
+      '#fcbbcc', '#fb6a4a', '#aaccff', '#67000d', '#b2df8a', '#2166ff', '#b2182b', '#003c30'
     ]
     const myColor = d3.scaleOrdinal(colorScheme).domain(this.data.map(v => v.Study));
     const svg = d3
@@ -68,6 +70,28 @@ export class BubbleChartComponent implements OnInit, AfterViewInit {
       .domain([0, 400])
       .range([5, 20]);
 
+    this.cs.selectedData$.subscribe((d) => {
+      this.select = d;
+      bubbles
+        .attr('fill', (d) => {
+          return !this.select.size || this.select.has(d.Study) ? myColor(d.Study) : 'gray'
+        })
+    })
+
+    const clickToSelect = (event, d: ChartItem) => {
+      this.cs.study_data.next(d.Study);
+    }
+
+    const mo = (event, d: ChartItem) => {
+      this.cs.mo_data.next(d.Study);
+    }
+
+    this.cs.mo_data$.subscribe((data) => {
+      bubbles
+        .attr('stroke', 'black')
+        .attr('stroke-width', (d)=>{return data==d.Study ?4:0})
+    })
+
     const bubbles = svg
       .append('g')
       .selectAll('circle')
@@ -79,15 +103,14 @@ export class BubbleChartComponent implements OnInit, AfterViewInit {
       .attr('cy', (d) => y(d[this.drug]))
       .attr('r', (d) => z(+d.patients))
       .sort((a, b) => +b.patients - +a.patients)
-      .on('click',(e,d)=> clickToSelect(e,d))
       .attr('fill', (d) => myColor(d.Study))
+      .on('click', clickToSelect)
+      .on('mouseover', mo)
+      .on('mouseout', (d)=>this.cs.mo_data.next(undefined))
+
+    bubbles
       .append('title')
       .text(d => `${d.Study} ${d.Type}\n${this.drug}: ${d[this.drug]}\npatients: ${d.patients}`)
-    
 
-    const clickToSelect=(event, d: ChartItem)=>{
-      this.cliked_study.selectedData.next(d);
-      // console.log('d:',d);
-    }
   }
 }

@@ -7,20 +7,20 @@ import { ChartDataService, ChartItem, typeMap } from './chart-data.service';
   providedIn: 'root'
 })
 export class ClickedStudyService {
-  selectedData=new Subject<ChartItem>();
-  // public selectedData$=this.selectedData.asObservable();
-  storeData=new Subject<ChartItem[]>();
-  public storeData$=this.storeData.asObservable();
-  type:string;
-  study:string;
+  private study=new Set<string>;
+  study_data=new Subject<string>;
+  selectedData$=new Subject<Set<string>>;
 
+  mo_data=new Subject<string>;
+  mo_data$=new Subject<string>;
+  
   constructor() {
-    this.selectedData.subscribe(d=>{
-      console.log('data',d);
-      this.type=d.Type;
-      this.study=d.Study;
-      const storeData=[d];
-      this.storeData.next(storeData);
-    });
+    this.study_data.subscribe((d)=>{
+      this.study.has(d)?this.study.delete(d):this.study.add(d);
+      this.selectedData$.next(this.study);
+    })
+    this.mo_data.subscribe((d)=>{
+      this.mo_data$.next(d);
+    })
   }
 }

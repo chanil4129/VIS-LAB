@@ -7,25 +7,28 @@ import { ChartItem } from 'src/app/shared/chart-data.service';
   templateUrl: './diverging-bar-chart.component.html',
   styleUrls: ['./diverging-bar-chart.component.css']
 })
-export class DivergingBarChartComponent implements OnInit, OnChanges{
+export class DivergingBarChartComponent implements OnInit, OnChanges {
   @Input() study: ChartItem[];
   @Input() drugList: string[];
   @ViewChild('rootsvg') rootsvg: ElementRef<SVGElement>;
   studies: ChartItem[];
+  update: () => void;
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log({changes})
+    console.log({ changes })
     if (!this.rootsvg) return;
     // @Input()으로 받은 study의 값이 변경되면 실행할 코드
     if (changes['study'].currentValue) {
       // index 0에 A, C가 오도록 정렬
-      this.study.sort((f,s) => f.Type > s.Type ? 1 : -1);
+      this.study.sort((f, s) => f.Type > s.Type ? 1 : -1);
       // 깊은 복사
-      this.studies = this.study.map(v => v = {...v});
+      this.studies = this.study.map(v => v = { ...v });
       // index 0의 약물값은 음수로 변경
       this.drugList.forEach(key => this.studies[0][key] = -+this.studies[0][key]);
-      this.render();
+      // this.render();
+      if (!this.update) this.render();
+      else this.update();
     }
   }
 
@@ -39,12 +42,12 @@ export class DivergingBarChartComponent implements OnInit, OnChanges{
     const width = svgWidth - margin.left - margin.right;
     const height = svgHeight - margin.top - margin.bottom;
     const svgRoot = d3.select(this.rootsvg.nativeElement)
-      .attr("viewBox",  `${0}, ${0} ${svgWidth} ${svgHeight}`)
+      .attr("viewBox", `${0}, ${0} ${svgWidth} ${svgHeight}`)
       .style("font", "9px sans-serif")
       .attr('width', svgWidth)
       .attr('height', svgHeight);
 
-    svgRoot.select('g.container').remove();
+    // svgRoot.select('g.container').remove();
     const svg = svgRoot
       .append('g')
       .attr('class', 'container')
@@ -97,25 +100,25 @@ export class DivergingBarChartComponent implements OnInit, OnChanges{
       .join('text')
       .style("font", "10px sans-serif")
       .attr('class', 'type')
-      .attr('x', (_, i) => 165 + i*20)
+      .attr('x', (_, i) => 165 + i * 20)
       .attr('y', 10)
       .text(d => d);
 
-    // studyies는 하나의 object => 하나의 막대만 표시 가능
-    this.drugList.forEach((drug) => {
-      barGroup
-        .data(this.studies)
-        .join("rect")
-        .attr("x", (d) => x(Math.min(0, d[drug])))
-        .attr("y", y(drug))
-        .attr("width", (d) => Math.abs(x(d[drug]) - x(0)))
-        .attr("height", y.bandwidth())
-        .attr('fill', ({Type}) => 
-          Type == "A" || Type == "C" 
-            ? 'darkorange' 
-            : 'steelblue'
-        ).append('title')
-         .text(d => `${d.Study} ${d.Type}`);
-    })
+    // studies는 하나의 object => 하나의 막대만 표시 가능
+    (this.update = () => {
+        barGroup
+          .data(this.studies)
+          .join("rect")
+          .attr("x", (d) => x(Math.min(0, d[drug])))
+          .attr("y", y(drug))
+          .attr("width", (d) => Math.abs(x(d[drug]) - x(0)))
+          .attr("height", y.bandwidth())
+          .attr('fill', ({ Type }) =>
+            Type == "A" || Type == "C"
+              ? 'darkorange'
+              : 'steelblue'
+          ).append('title')
+          .text(d => `${d.Study} ${d.Type}`);
+    })();
   }
 }
